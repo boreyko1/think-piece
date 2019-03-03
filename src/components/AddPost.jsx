@@ -37,6 +37,7 @@ class AddPost extends Component {
 
   render() {
     const { title, content } = this.state;
+
     return (
       <form onSubmit={this.handleSubmit} className="AddPost">
         <input
