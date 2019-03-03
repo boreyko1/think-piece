@@ -15,10 +15,54 @@ firebase.initializeApp(config);
 
 export const firestore = firebase.firestore();
 export const auth = firebase.auth();
+export const signOut = () => auth.signOut();
 
 export const provider = new firebase.auth.GoogleAuthProvider();
 export const signInWithGoogle = () => auth.signInWithPopup(provider);
 
 window.firebase = firebase;
+
+export const createUserProfileDocument = async (user, additionalData) => {
+  if (!user) return;
+
+  // get a ref to the place in the database
+  const userRef = firestore.doc(`users/${user.uid}`);
+
+  // go and fetch document in that location
+  const snapshot = await userRef.get();
+
+  if (!snapshot.exists) {
+    const { displayName, email, photoURL } = user;
+    const createdAt = new Date();
+    try {
+      await userRef.set({
+        displayName,
+        email,
+        photoURL,
+        createdAt,
+        ...additionalData
+      });
+    } catch (error) {
+      console.error('Error creating user', error.message);
+    }
+  }
+
+  return getUserDocument(user.uid);
+};
+
+export const getUserDocument = async uid => {
+  if (!uid) return null;
+
+  try {
+    const userDocument = await firestore
+      .collection('users')
+      .doc(uid)
+      .get();
+
+    return { uid, ...userDocument.data() };
+  } catch (error) {
+    console.error('Error fetching user', error.message);
+  }
+};
 
 export default firebase;
