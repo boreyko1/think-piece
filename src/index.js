@@ -2,14 +2,17 @@ import React from 'react';
 import { render } from 'react-dom';
 
 import PostsProvider from './providers/PostsProvider';
-
-import './index.scss';
+import UserProvider from './providers/UserProvider';
 
 import Application from './components/Application';
 
+import './index.scss';
+
 render(
-  <PostsProvider>
-    <Application />
-  </PostsProvider>,
+  <UserProvider>
+    <PostsProvider>
+      <Application />
+    </PostsProvider>
+  </UserProvider>,
   document.getElementById('root')
 );

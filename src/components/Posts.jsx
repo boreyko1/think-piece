@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
+
 import Post from './Post';
 import AddPost from './AddPost';
+
 import { PostsContext } from '../providers/PostsProvider';
 
 const Posts = () => {
